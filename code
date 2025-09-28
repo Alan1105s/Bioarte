@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bioarte — Ensayo Interactivo</title>
+<style>
+  :root{
+    --accent:#0b6e6b;
+    --muted:#666;
+    --bg:#fafafa;
+    --card:#fff;
+    --glass: rgba(255,255,255,0.85);
+    --maxw:1100px;
+    --mono: "Roboto Mono", monospace;
+  }
+  body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:linear-gradient(180deg,#f6f8fa,#eef6f6); color:#111;}
+  .wrap{max-width:var(--maxw); margin:24px auto; display:grid; grid-template-columns:260px 1fr; gap:20px; padding:18px;}
+  .sidebar{position:sticky; top:18px; height:calc(100vh - 36px); overflow:auto; padding:18px; background:var(--card); border-radius:10px; box-shadow:0 6px 18px rgba(20,30,40,0.06);}
+  .logo{font-weight:700; color:var(--accent); font-size:18px; margin-bottom:8px;}
+  .nav{list-style:none; padding:0; margin:12px 0;}
+  .nav li{margin:6px 0;}
+  .nav a{display:block; padding:8px 10px; border-radius:8px; color:var(--accent); text-decoration:none;}
+  .nav a:hover{background:#eef9f8;}
+  .content{padding:22px; background:var(--card); border-radius:10px; box-shadow:0 8px 30px rgba(10,20,30,0.04); min-height:70vh;}
+  h1{margin:0 0 8px 0; font-size:22px;}
+  h2{margin:12px 0 8px 0; font-size:18px; color:var(--accent);}
+  p{line-height:1.55; color:#222; margin:10px 0;}
+  .module{padding:12px 0; border-bottom:1px dashed #eee;}
+  .meta{font-size:13px; color:var(--muted);}
+  .btn{display:inline-block; background:var(--accent); color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none;}
+  .accordion{border-radius:8px; overflow:hidden; background:linear-gradient(180deg,#fff,#fbffff); border:1px solid #e6f2f0; margin:10px 0;}
+  .acc-item{border-top:1px solid #eef6f6;}
+  .acc-item:first-child{border-top:none;}
+  .acc-head{padding:12px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;}
+  .acc-body{padding:12px 14px; display:none; background:transparent; color:#222;}
+  .timeline{display:flex; gap:10px; overflow:auto; padding:8px 0 12px 0;}
+  .t-item{min-width:160px; background:#fff; padding:10px; border-radius:8px; border:1px solid #eef6f6;}
+  .gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin:10px 0;}
+  .thumb{background:#f8fbfb; padding:8px; border-radius:8px; border:1px solid #eef6f6; text-align:center; min-height:80px; display:flex; align-items:center; justify-content:center;}
+  .refs{font-size:13px; color:var(--muted); margin-top:14px;}
+  footer{font-size:13px; color:var(--muted); margin-top:18px; border-top:1px dashed #eee; padding-top:12px;}
+  /* modal */
+  .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.45); z-index:60;}
+  .card-modal{width:90%; max-width:900px; background:var(--card); padding:18px; border-radius:12px; box-shadow:0 12px 40px rgba(10,20,30,0.3); max-height:85vh; overflow:auto;}
+  .close{float:right; color:var(--muted); font-weight:700; cursor:pointer;}
+  /* responsive */
+  @media (max-width:900px){.wrap{grid-template-columns:1fr; padding:12px;} .sidebar{position:relative; height:auto;}}
+  /* small helpers */
+  .kbd{font-family:var(--mono); font-size:12px; background:#f3faf9; border:1px solid #e6f6f4; padding:4px 8px; border-radius:6px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <aside class="sidebar" aria-label="Navegación del ensayo">
+    <div class="logo">BIOARTE — Ensayo Interactivo</div>
+    <div class="meta">Tesis: evidencia anticipatoria de dilemas biotecnológicos</div>
+    <ul class="nav" id="navlist">
+      <li><a href="#m1" data-target="m1">Inicio · Introducción</a></li>
+      <li><a href="#m2" data-target="m2">Tesis (explicita)</a></li>
+      <li><a href="#m3" data-target="m3">Contexto histórico</a></li>
+      <li><a href="#m4" data-target="m4">Bioarte como nuevo medio</a></li>
+      <li><a href="#m5" data-target="m5">Herramientas biotecnológicas</a></li>
+      <li><a href="#m6" data-target="m6">Obras paradigmáticas</a></li>
+      <li><a href="#m7" data-target="m7">Dimensión ética</a></li>
+      <li><a href="#m8" data-target="m8">Dimensión legal e institucional</a></li>
+      <li><a href="#m9" data-target="m9">Bioarte y nuevos medios</a></li>
+      <li><a href="#concl" data-target="concl">Conclusiones</a></li>
+      <li><a href="#bib" data-target="bib">Bibliografía (APA)</a></li>
+    </ul>
+
+    <div style="margin-top:18px">
+      <a class="btn" id="openbib">Ver bibliografía</a>
+      <a class="btn" id="printBtn" style="background:#2b6bb3; margin-left:8px">Imprimir / PDF</a>
+    </div>
+
+    <p class="refs" style="margin-top:14px">Consejo: sube este archivo a <span class="kbd">GitHub Pages</span> o <span class="kbd">Netlify</span> para publicar gratis. Para incrustarlo en WordPress/Wix: usa iframe/embed.</p>
+  </aside>
+
+  <main class="content" id="main">
+    <section id="m1" class="module" aria-labelledby="title-m1">
+      <h1 id="title-m1">Inicio — Introducción</h1>
+      <p><strong>Los nuevos medios</strong> se refieren a prácticas artísticas que incorporan tecnologías emergentes como el videoarte, el arte digital y la realidad aumentada. A finales del siglo XX surgió una forma aún más disruptiva: el <strong>bioarte</strong>, que utiliza organismos vivos —células, tejidos, ADN— como material artístico. A diferencia de otros medios, el bioarte emplea la vida misma para crear experiencias estéticas que suscitan interrogantes éticos y sociales.</p>
+      <p class="meta"><em>Fuentes principales:</em> Redalyc (2022); Scielo (2022); UNTREF (2023).</p>
+    </section>
+
+    <section id="m2" class="module" aria-labelledby="title-m2">
+      <h2 id="title-m2">Tesis (explícita)</h2>
+      <p><strong>Tesis:</strong> <em>El bioarte no debe entenderse solo como un nuevo medio artístico por el uso de organismos vivos, sino como una práctica que anticipa y hace visibles los dilemas éticos, legales y sociales de la biotecnología, mostrando hasta dónde el ser humano está dispuesto a llegar al aplicar estas tecnologías en la sociedad.</em></p>
+      <p>Nota: la tesis es la posición del autor y no requiere citas; las secciones siguientes la prueban con evidencias y referencias.</p>
+    </section>
+
+    <section id="m3" class="module">
+      <h2>Contexto histórico</h2>
+      <p>El bioarte se consolida a finales de los años 90. En ese periodo la biotecnología (ingeniería genética, clonación, cultivo celular) avanzaba rápidamente y algunos artistas comenzaron a explorar la posibilidad de usar lo vivo como material. Obras como <strong>GFP Bunny</strong> (Eduardo Kac, 1999) o <strong>Nature?</strong> (Marta de Menezes, 1999) fueron pioneras en mostrar que el arte podía intervenir procesos biológicos. Laboratorios-artísticos como <strong>SymbioticA</strong> impulsaron proyectos que hicieron visible la complejidad técnica y ética del trabajo con vida en contextos culturales (SymbioticA; RIAA-UAEM).</p>
+
+      <div class="timeline" aria-hidden="false">
+        <div class="t-item"><strong>1999</strong><div style="font-size:13px;color:var(--muted)">GFP Bunny (Kac)</div></div>
+        <div class="t-item"><strong>1999</strong><div style="font-size:13px;color:var(--muted)">Nature? (Menezes)</div></div>
+        <div class="t-item"><strong>2004</strong><div style="font-size:13px;color:var(--muted)">Victimless Leather (SymbioticA)</div></div>
+        <div class="t-item"><strong>2010s</strong><div style="font-size:13px;color:var(--muted)">Proyecto Bios / Exposiciones</div></div>
+      </div>
+
+      <div style="margin-top:8px" class="accordion" id="acc-hist">
+        <div class="acc-item">
+          <div class="acc-head">¿Por qué surgió en los 90?</div>
+          <div class="acc-body">La conjunción entre disponibilidad técnica (laboratorios accesibles, biotecnología en expansión) y la voluntad crítica de artistas por cuestionar el antropocentrismo y la noción de "natural" impulsó el movimiento.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head">Instituciones clave</div>
+          <div class="acc-body">SymbioticA (Australia), Proyecto Bios (Buenos Aires), centros universitarios de arte- ciencia y festivales como Ars Electronica han sido plataformas esenciales.</div>
+        </div>
+      </div>
+
+      <p class="refs">Referencias: Redalyc (2022); RIAA-UAEM; UCM (2015).</p>
+    </section>
+
+    <section id="m4" class="module">
+      <h2>El bioarte como nuevo medio</h2>
+
+      <p>Argumento central: <strong>el bioarte no representa la vida; la produce y la manipula</strong>. Esto altera las nociones de soporte, temporalidad y experiencia estética. A diferencia del arte digital, la obra bioarte es a menudo única, efímera y vulnerable.</p>
+
+      <div class="accordion" id="acc-medium">
+        <div class="acc-item">
+          <div class="acc-head">Soporte</div>
+          <div class="acc-body">De pigmentos/píxeles a ADN/células: el medio mismo cambia y con ello la metodología artística.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head">Temporalidad</div>
+          <div class="acc-body">Obras que crecen, mueren o mutan —la conservación y exhibición son problemáticas nuevas.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head">Relación espectador - obra</div>
+          <div class="acc-body">El público no se limita a mirar: se enfrenta a la fragilidad y vulnerabilidad de la vida manipulada.</div>
+        </div>
+      </div>
+
+      <p class="refs">Fuentes: UNTREF (2023); Scielo (2022); Rosales Peña (2024).</p>
+    </section>
+
+    <section id="m5" class="module">
+      <h2>Herramientas biotecnológicas</h2>
+
+      <p>El bioarte utiliza técnicas de laboratorio como transgénesis, cultivo celular, edición genética y bioimpresión. Estas herramientas no solo permiten la ejecución técnica de las obras, sino que son parte del discurso crítico: muestran capacidades concretas de la biotecnología y sus límites.</p>
+
+      <div class="accordion" id="acc-tools">
+        <div class="acc-item">
+          <div class="acc-head">Transgénesis</div>
+          <div class="acc-body">Inserción de genes entre especies (p. ej. GFP Bunny). Plantea preguntas sobre identidad genética y domesticación.</div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-head">Ingeniería de tejidos (Tissue Art)</div>
+          <div class="acc-body">Cultivo de células para crear estructuras (Victimless Leather). Pregunta sobre propiedad y control de tejido vivo.</div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-head">Edición genética (CRISPR)</div>
+          <div class="acc-body">Herramienta de precisión que permite modificaciones puntuales al genoma; su uso en arte anticipa debates de regulación y ética.</div>
+        </div>
+
+        <div class="acc-item">
+          <div class="acc-head">Bioimpresión 3D</div>
+          <div class="acc-body">Impresión de estructuras biológicas; en el arte cuestiona los límites entre creación estética y manufactura de tejidos.</div>
+        </div>
+      </div>
+
+      <p class="refs">Ver: La Recicladora Cultural (2024); Fundación ByB (2024); RIAA-UAEM.</p>
+    </section>
+
+    <section id="m6" class="module">
+      <h2>Obras paradigmáticas</h2>
+
+      <div class="gallery" aria-label="Galería de obras">
+        <div class="thumb" data-title="GFP Bunny">GFP Bunny<br><small class="meta">Eduardo Kac, 1999</small></div>
+        <div class="thumb" data-title="Nature?">Nature?<br><small class="meta">Marta de Menezes, 1999</small></div>
+        <div class="thumb" data-title="Truly Natural">Truly Natural<br><small class="meta">M. de Menezes, 2003</small></div>
+        <div class="thumb" data-title="Victimless Leather">Victimless Leather<br><small class="meta">SymbioticA, 2004</small></div>
+        <div class="thumb" data-title="May the Horse Live in Me">May the Horse Live in Me<br><small class="meta">Art Orienté Objet, 2011</small></div>
+      </div>
+
+      <p><strong>Lectura crítica de las obras:</strong> Estas piezas funcionan como experimentos sociales. <em>GFP Bunny</em> demostró la posibilidad técnica de cruzar material genético entre especies y provocó debates públicos sobre el derecho a crear seres transgénicos en nombre del arte. <em>Victimless Leather</em> expuso el miedo institucional ante el crecimiento in vitro y la incapacidad de contener la vida en un museo.</p>
+
+      <p class="refs">Referencias primarias: UCM (2015); Repositorio Lisboa (2013); RIAA-UAEM.</p>
+    </section>
+
+    <section id="m7" class="module">
+      <h2>Dimensión ética</h2>
+
+      <p>El bioarte pone en evidencia varios dilemas éticos:</p>
+      <ol>
+        <li><strong>Instrumentalización de la vida:</strong> ¿puede la vida ser tratada como material artístico cuando no existe utilidad clínica?</li>
+        <li><strong>Consentimiento y sufrimiento:</strong> ¿cómo evaluamos el sufrimiento de organismos o células en el contexto artístico?</li>
+        <li><strong>Doble estándar:</strong> aceptamos sacrificios en nombre de la ciencia, pero cuestionamos la misma manipulación en el arte; el bioarte hace visible esta contradicción.</li>
+      </ol>
+
+      <p>Rosales Peña (2024) y Scielo (2022) indican que justamente por no prometer una utilidad, el bioarte plantea preguntas morales que la investigación científica suele ocultar tras la justificación del progreso.</p>
+
+      <div class="accordion" id="acc-eth">
+        <div class="acc-item"><div class="acc-head">Argumentos a favor</div><div class="acc-body">El arte como espacio público para debatir; su valor pedagógico y crítico puede justificar la experimentación si se mantiene el cuidado y el respeto.</div></div>
+        <div class="acc-item"><div class="acc-head">Argumentos en contra</div><div class="acc-body">Posible banalización del sufrimiento y normalización de prácticas que podrían convertirse en precedentes peligrosos.</div></div>
+      </div>
+
+      <p class="refs">Obra Gruesa (2024); Scielo (2022); Rosales Peña (2024).</p>
+    </section>
+
+    <section id="m8" class="module">
+      <h2>Dimensión legal e institucional</h2>
+
+      <p>La relación entre bioarte y derecho revela tensiones:</p>
+      <ul>
+        <li><strong>Autoría:</strong> ¿quién firma una obra que cambia con el tiempo?</li>
+        <li><strong>Propiedad:</strong> ¿se puede poseer tejido vivo? ¿aplica la idea de copyright?</li>
+        <li><strong>Patentes y moralidad:</strong> la protección por patente suele topar con límites de orden público cuando está en juego la manipulación de vida.</li>
+      </ul>
+
+      <p>Estudios sobre propiedad intelectual (Externado, 2022) muestran que los marcos actuales no encajan bien con la materialidad viva del bioarte. Instituciones como SymbioticA han construido protocolos éticos internos para lidiar con estas problemáticas, lo que muestra la necesidad de marcos interdisciplinares.</p>
+
+      <p class="refs">Externado (2022); Centro de Arte UNLP (2020).</p>
+    </section>
+
+    <section id="m9" class="module">
+      <h2>Bioarte y nuevos medios</h2>
+
+      <p>Comparación analógica: el videoarte anticipó la cultura mediática y digital; el bioarte anticipa la cultura biotecnológica. Sus funciones convergen: ambos anticipan escenarios técnicos y obligan a la sociedad a reflexionar antes de la adopción masiva.</p>
+
+      <p>El bioarte hace tres cosas esenciales:</p>
+      <ol>
+        <li>Trae al espacio público tecnologías y preguntas que suelen quedarse en laboratorios.</li>
+        <li>Convoca a disciplinas diversas a debatir (arte, ciencia, derecho, ética).</li>
+        <li>Actúa como señal de advertencia: muestra límites prácticos y simbólicos de la intervención en lo vivo.</li>
+      </ol>
+
+      <p class="refs">Dialnet (2024); Rosales Peña (2024); La Recicladora Cultural (2024).</p>
+    </section>
+
+    <section id="concl" class="module">
+      <h2>Conclusiones (argumentadas)</h2>
+
+      <p>La tesis planteada encuentra soporte en los argumentos y ejemplos presentados. Aquí las conclusiones responden a la tesis con aportes concretos:</p>
+
+      <ol>
+        <li><strong>Función anticipatoria demostrada:</strong> Las obras y prácticas (GFP Bunny; Victimless Leather; proyectos CRISPR) muestran concretamente cómo las capacidades técnicas emergentes son llevadas al espacio público por el arte, adelantando preguntas regulatorias y morales antes de su adopción general.</li>
+
+        <li><strong>Espacio de prueba ética:</strong> El bioarte no sólo provoca: sirve para ensayar respuestas sociales. Al exponer el conflicto entre utilidad (criterio científico) y significado (criterio artístico), obliga a reformular cómo evaluamos el uso de vida en contextos no terapéuticos.</li>
+
+        <li><strong>Demostración de insuficiencia legal:</strong> Los problemas de autoría, fijación y patente observados en casos y estudios (Externado, 2022) prueban que las normas vigentes no contemplan la materialidad cambiante de las obras vivas, lo que valida la idea de que el bioarte evidencia tensiones legales reales.</li>
+
+        <li><strong>Reconfiguración de lo natural:</strong> A través de ejemplos concretos, se ve que las nociones de “natural” y “artificial” se hibridan; por tanto, la sociedad necesita nuevas categorías conceptuales y normativas para enfrentar estas mezclas.</li>
+
+        <li><strong>Escenario de política pública:</strong> Finalmente, el bioarte funciona como un mecanismo de participación pública: al integrar a ciudadanos en experiencias estéticas que involucran biotecnologías, contribuye a la educación social y a la toma de decisiones informadas sobre su uso.</li>
+      </ol>
+
+      <p>Por estas razones, la tesis no se mantiene como mera afirmación: queda probada por la convergencia de evidencias técnicas, obras emblemáticas, debates éticos y vacíos legales recogidos en las referencias.</p>
+    </section>
+
+    <section id="bib" class="module">
+      <h2>Bibliografía (APA 7)</h2>
+      <div style="font-size:14px; line-height:1.5;">
+<pre style="white-space:pre-wrap; font-family:inherit; font-size:13px;">
+Centro de Arte UNLP. (2020). Cosas extrañas: Bioarte en la Argentina. https://www.centrodearte.unlp.edu.ar/cosas-extranas-bioarte-en-la-argentina/
+
+Externado de Colombia. (2022). Retos del bioarte frente a la propiedad intelectual. Revista de Propiedad Intelectual. https://revistas.uexternado.edu.co/index.php/propin/article/view/6344/8637
+
+Fundación Bunge y Born. (2024). Bioarte: El arte de crear obras con organismos vivos. Utopía. https://utopia.fundacionbyb.org/crear/bioarte
+
+La Recicladora Cultural. (2024). Bioarte y tecnologías emergentes: CRISPR y bioimpresión. https://larecicladoracultural.es/actualidad/bioarte/
+
+Menezes, M. de. (2003). Truly Natural. https://martademenezes.com/art/nature/truly-natural/
+
+Menezes, M. de. (1999). Nature?. https://martademenezes.com/art/nature/nature/
+
+Obra Gruesa. (2024). Ética y arte. Ministerio de las Culturas, las Artes y el Patrimonio. https://obra-gruesa.cultura.gob.cl/wp-content/uploads/2024/10/etica-y-arte-2.pdf
+
+Redalyc. (2022). Conflictos bioéticos y estéticos en el bioarte: una perspectiva desde las emociones. Revista Arte, Individuo y Sociedad, 34(1). https://www.redalyc.org/journal/814/81470268003/html/
+
+Repositorio Lisboa. (2013). García, J. L. Arte y naturaleza alterada: Nature? de Marta de Menezes. https://repositorio.ulisboa.pt/bitstream/10451/11134/1/ICS_JLGarcia_Arte_ARI.pdf
+
+RIAA-UAEM. (2010). Victimless Leather y la vida in vitro. https://riaa.uaem.mx/xmlui/bitstream/handle/20.500.12055/2182/EDTRNO01.pdf
+
+Rosales Peña, C. A. (2024). El Bioarte como Poética Crítica. Dialnet. https://dialnet.unirioja.es/descarga/articulo/9904961.pdf
+
+Scielo. (2022). El bioarte y sus dilemas bioéticos. Revista Colombiana de Antropología. http://www.scielo.org.co/scielo.php?script=sci_arttext&pid=S1900-54072022000100051
+
+UNTREF. (2023). El bioarte y la redefinición de lo vivo. Mundo UNTREF. https://www.untref.edu.ar/mundountref/bioarte-redefinicion-vida
+
+UCM. (2015). Tecnologías del arte transgénico: Eduardo Kac y Art Orienté Objet. Revista ARIS. https://revistas.ucm.es/index.php/ARIS/article/download/81966/4564456562422/4564456661117
+</pre>
+      </div>
+      <p class="refs">Observación: puedes añadir enlaces directos en la versión final para el lector.</p>
+    </section>
+
+    <footer>
+      <div class="meta">Archivo interactivo — Ensayo académico multimedia sobre Bioarte. Autor: <strong>Tu nombre</strong>. Fecha: ____.</div>
+    </footer>
+
+  </main>
+</div>
+
+<!-- modal bibliografía -->
+<div class="modal" id="modal">
+  <div class="card-modal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3>Bibliografía (APA 7)</h3>
+      <div class="close" id="closeModal">X</div>
+    </div>
+    <div style="margin-top:8px; font-size:14px; line-height:1.5;">
+      <!-- copia el bloque de referencias del documento principal aquí si quieres -->
+      <pre style="white-space:pre-wrap; font-family:inherit; font-size:13px;">
+(La lista APA aparece también en la sección bibliografía del documento.)</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+  // navigation
+  document.querySelectorAll('[data-target]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      const t = document.getElementById(a.dataset.target);
+      t.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // accordion simple
+  document.querySelectorAll('.acc-head').forEach(h=>{
+    h.addEventListener('click', ()=>{
+      const body = h.nextElementSibling;
+      const open = body.style.display === 'block';
+      // close others in same accordion
+      const parent = h.closest('.accordion');
+      parent.querySelectorAll('.acc-body').forEach(b=>b.style.display='none');
+      if(!open) body.style.display = 'block';
+    });
+  });
+
+  // gallery click (lightbox minimal)
+  document.querySelectorAll('.thumb').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      const title = t.dataset.title || 'obra';
+      const modal = document.getElementById('modal');
+      modal.style.display = 'flex';
+      modal.querySelector('h3').textContent = title;
+      modal.querySelector('pre').textContent = 'Información sobre: '+ title + '\\n\\n(En la versión final, inserta imagen y texto crítico aquí. Incluye fuente y crédito.)';
+    });
+  });
+
+  document.getElementById('closeModal').addEventListener('click', ()=>document.getElementById('modal').style.display='none');
+  document.getElementById('openbib').addEventListener('click', ()=>{document.querySelector('#bib').scrollIntoView({behavior:'smooth'});});
+  document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+
+  // close modal on backdrop click
+  document.getElementById('modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') e.target.style.display='none'; });
+
+  // keyboard shortcuts hint (optional)
+  window.addEventListener('keydown', (e)=>{ if(e.key==='b') document.querySelector('#bib').scrollIntoView({behavior:'smooth'}); });
+</script>
+
+</body>
+</html>
